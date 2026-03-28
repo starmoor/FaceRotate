@@ -1,0 +1,9 @@
+Package: com.starmoor.facerotate
+Name: FaceRotate
+Version: 1.0.0
+Architecture: iphoneos-arm64e
+Description: Face-aware auto-rotation using TrueDepth infrared sensor（中文名：随脸旋转）
+Maintainer: starmoor
+Author: starmoor
+Section: Tweaks
+Depends: mobilesubstrate, preferenceloader

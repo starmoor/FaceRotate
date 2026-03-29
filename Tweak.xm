@@ -9,6 +9,7 @@
 #import <roothide.h>
 
 #include "FRCommon.h"
+#include "FRUpdateCheck.h"
 
 #pragma mark - Private Interfaces
 
@@ -791,6 +792,7 @@ static void DisplayStatusNote(CFNotificationCenterRef c, void *o, CFStringRef n,
         probeAttentionStatusOnPollQueue(YES);
     });
     ReloadPrefsLiveAsync(YES);
+    FRUpdateCheckStart();
 
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
         const char *libjb = "/basebin/libjailbreak.dylib";

@@ -709,8 +709,8 @@ static void FRWritePrefValue(CFStringRef key, CFPropertyListRef value) {
 
 - (void)presentAboutAlert {
     NSString *msg = FRLoc(
-        @"版本：1.0.0\n\n基于 TrueDepth 红外注视感知的事件驱动自动旋转插件：在竖排方向锁定关闭时，按人脸垂直方向对齐屏幕朝向，侧躺也能自然横竖切换。\n\n• 零常驻摄像头 / 无隐私绿点\n• 超时、遮挡、无脸、注视感知关闭严格回退原生重力\n• 兼容 iOS 15–17（TraitsArbiter 与传统管线）",
-        @"Version: 1.0.0\n\nEvent-driven face-aware auto-rotation powered by TrueDepth infrared attention detection. Aligns screen orientation with your face upright axis while Portrait Lock is off.\n\n• No continuous camera stream / Zero green privacy dot\n• Strict fail-open to native gravity on timeout, obstruction, no face, or disabled Attention Aware\n• Supports iOS 15–17 (TraitsArbiter & legacy path)");
+        @"版本：" @FR_VERSION @"\n\n基于 TrueDepth 红外注视感知的事件驱动自动旋转插件：在竖排方向锁定关闭时，按人脸垂直方向对齐屏幕朝向，侧躺也能自然横竖切换。\n\n• 零常驻摄像头 / 无隐私绿点\n• 超时、遮挡、无脸、注视感知关闭严格回退原生重力\n• 兼容 iOS 15–17（TraitsArbiter 与传统管线）",
+        @"Version: " @FR_VERSION @"\n\nEvent-driven face-aware auto-rotation powered by TrueDepth infrared attention detection. Aligns screen orientation with your face upright axis while Portrait Lock is off.\n\n• No continuous camera stream / Zero green privacy dot\n• Strict fail-open to native gravity on timeout, obstruction, no face, or disabled Attention Aware\n• Supports iOS 15–17 (TraitsArbiter & legacy path)");
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:FRLoc(@"关于 FaceRotate（随脸旋转）", @"About FaceRotate")
                                                                    message:msg
                                                             preferredStyle:UIAlertControllerStyleAlert];

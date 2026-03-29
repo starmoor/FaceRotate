@@ -5,7 +5,7 @@ THEOS_PACKAGE_SCHEME ?= roothide
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = FaceRotate
-FaceRotate_FILES = Tweak.xm
+FaceRotate_FILES = Tweak.xm FRUpdateCheck.m
 FaceRotate_CFLAGS = -fobjc-arc -Os
 
 BUNDLE_NAME = FaceRotatePrefs

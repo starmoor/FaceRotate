@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#define FR_VERSION           "1.0.0"
+#define FR_VERSION           "1.0.1"
 #define FR_PREFS_DOMAIN      "com.starmoor.facerotate"
 #define FR_PREFS_PATH        "/var/mobile/Library/Preferences/com.starmoor.facerotate.plist"
 
@@ -77,6 +77,24 @@ static inline int FRClampInt(int v, int lo, int hi) {
     if (v < lo) return lo;
     if (v > hi) return hi;
     return v;
+}
+
+// 版本号比较（"1.0.1" 风格）：按非数字分段逐段比大小，段缺按 0。
+// 本项目版本全数字段，够用（FRUpdateCheck 解析 apt 源用）。
+static inline int FRVersionCompare(NSString *a, NSString *b)
+{
+    if (a.length == 0) return b.length ? -1 : 0;
+    if (b.length == 0) return 1;
+    NSCharacterSet *nonDigit = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    NSArray<NSString *> *sa = [a componentsSeparatedByCharactersInSet:nonDigit];
+    NSArray<NSString *> *sb = [b componentsSeparatedByCharactersInSet:nonDigit];
+    NSUInteger n = sa.count > sb.count ? sa.count : sb.count;
+    for (NSUInteger i = 0; i < n; i++) {
+        long long va = i < sa.count ? [sa[i] longLongValue] : 0;
+        long long vb = i < sb.count ? [sb[i] longLongValue] : 0;
+        if (va != vb) return va < vb ? -1 : 1;
+    }
+    return 0;
 }
 
 static inline int FRRoundStepInt(double v, int lo, int hi, int step) {

@@ -69,14 +69,14 @@ static void FRWriteBlacklistToPrefs(NSSet<NSString *> *set) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = FRLoc(@"应用黑名单", @"App Blacklist");
+    self.title = FRLoc(@"应用黑名单", @"App Blacklist", @"Чёрный список");
     self.selectedBundleIDs = [NSMutableSet setWithArray:FRReadBlacklistFromPrefs()];
 
     UISearchController *sc = [[UISearchController alloc] initWithSearchResultsController:nil];
     sc.searchResultsUpdater = self;
     sc.obscuresBackgroundDuringPresentation = NO;
     sc.hidesNavigationBarDuringPresentation = NO;
-    sc.searchBar.placeholder = FRLoc(@"搜索应用名称或 Bundle ID", @"Search app name or Bundle ID");
+    sc.searchBar.placeholder = FRLoc(@"搜索应用名称或 Bundle ID", @"Search app name or Bundle ID", @"Поиск по названию или Bundle ID");
     self.searchController = sc;
     self.navigationItem.searchController = sc;
     self.navigationItem.hidesSearchBarWhenScrolling = NO;
@@ -242,14 +242,14 @@ static void FRWriteBlacklistToPrefs(NSSet<NSString *> *set) {
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.loading) {
-        return FRLoc(@"正在加载已安装应用...", @"Loading installed apps...");
+        return FRLoc(@"正在加载已安装应用...", @"Loading installed apps...", @"Загрузка приложений...");
     }
-    return FRLoc(@"勾选的应用始终使用系统原生重力旋转", @"Checked apps always use native gravity rotation");
+    return FRLoc(@"勾选的应用始终使用系统原生重力旋转", @"Checked apps always use native gravity rotation", @"Отмеченные приложения используют обычный поворот по датчику");
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     if (self.loading) return nil;
-    return [NSString stringWithFormat:FRLoc(@"共 %lu 个应用，已屏蔽 %lu 个", @"%lu apps listed, %lu blacklisted"),
+    return [NSString stringWithFormat:FRLoc(@"共 %lu 个应用，已屏蔽 %lu 个", @"%lu apps listed, %lu blacklisted", @"Всего: %lu, в списке: %lu"),
             (unsigned long)self.filteredApps.count,
             (unsigned long)self.selectedBundleIDs.count];
 }
@@ -301,7 +301,7 @@ static void FRWriteBlacklistToPrefs(NSSet<NSString *> *set) {
 
     UITableViewHeaderFooterView *footer = [tableView footerViewForSection:0];
     if (footer && footer.textLabel) {
-        footer.textLabel.text = [NSString stringWithFormat:FRLoc(@"共 %lu 个应用，已屏蔽 %lu 个", @"%lu apps listed, %lu blacklisted"),
+        footer.textLabel.text = [NSString stringWithFormat:FRLoc(@"共 %lu 个应用，已屏蔽 %lu 个", @"%lu apps listed, %lu blacklisted", @"Всего: %lu, в списке: %lu"),
                                  (unsigned long)self.filteredApps.count,
                                  (unsigned long)self.selectedBundleIDs.count];
         [footer setNeedsLayout];

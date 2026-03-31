@@ -1,4 +1,4 @@
-// FaceRotate UI 本地化（仅 Preferences bundle 使用；简体中文 / English，默认跟随系统）
+// FaceRotate UI 本地化（仅 Preferences bundle 使用；简体中文 / English / Русский，默认跟随系统）
 
 #pragma once
 
@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 #include "FRCommon.h"
 
-static int sFRResolvedLang = -1; // -1=未初始化, 0=en, 1=zh
+static int sFRResolvedLang = -1; // -1=未初始化, 0=en, 1=zh, 2=ru
 
 static inline NSString *FRReadLangPref(void) {
     CFPropertyListRef v = CFPreferencesCopyAppValue(CFSTR(FRKEY_LANG), CFSTR(FR_PREFS_DOMAIN));
@@ -14,7 +14,7 @@ static inline NSString *FRReadLangPref(void) {
     id obj = CFBridgingRelease(v);
     if ([obj isKindOfClass:[NSString class]]) {
         NSString *s = (NSString *)obj;
-        if ([s isEqualToString:@"zh"] || [s isEqualToString:@"en"]) {
+        if ([s isEqualToString:@"zh"] || [s isEqualToString:@"en"] || [s isEqualToString:@"ru"]) {
             return s;
         }
     }
@@ -32,15 +32,23 @@ static inline int FRResolvedLangCode(void) {
         sFRResolvedLang = 1;
     } else if ([pref isEqualToString:@"en"]) {
         sFRResolvedLang = 0;
+    } else if ([pref isEqualToString:@"ru"]) {
+        sFRResolvedLang = 2;
     } else {
         NSString *sys = [NSLocale preferredLanguages].firstObject;
-        sFRResolvedLang = [sys hasPrefix:@"zh"] ? 1 : 0;
+        if ([sys hasPrefix:@"zh"]) {
+            sFRResolvedLang = 1;
+        } else if ([sys hasPrefix:@"ru"]) {
+            sFRResolvedLang = 2;
+        } else {
+            sFRResolvedLang = 0;
+        }
     }
     return sFRResolvedLang;
 }
 
 static inline void FRWriteLangPref(NSString *code) {
-    NSString *val = ([code isEqualToString:@"zh"] || [code isEqualToString:@"en"]) ? code : @"system";
+    NSString *val = ([code isEqualToString:@"zh"] || [code isEqualToString:@"en"] || [code isEqualToString:@"ru"]) ? code : @"system";
     CFPreferencesSetValue(CFSTR(FRKEY_LANG), (__bridge CFPropertyListRef)val,
                           CFSTR(FR_PREFS_DOMAIN),
                           kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
@@ -51,27 +59,32 @@ static inline void FRWriteLangPref(NSString *code) {
                                          NULL, NULL, TRUE);
 }
 
-static inline NSString *FRLoc(NSString *zh, NSString *en) {
-    return (FRResolvedLangCode() == 1) ? zh : en;
+static inline NSString *FRLoc(NSString *zh, NSString *en, NSString *ru) {
+    int code = FRResolvedLangCode();
+    if (code == 1) return zh;
+    if (code == 2) return ru ?: en;
+    return en;
 }
 
 static inline NSString *FRCurrentLangDisplayName(void) {
     NSString *pref = FRReadLangPref();
     if ([pref isEqualToString:@"zh"]) return @"简体中文";
     if ([pref isEqualToString:@"en"]) return @"English";
-    return FRLoc(@"跟随系统", @"Follow System");
+    if ([pref isEqualToString:@"ru"]) return @"Русский";
+    return FRLoc(@"跟随系统", @"Follow System", @"Как в системе");
 }
 
 static inline void FRPresentLanguagePicker(UIViewController *vc, UIView *sourceView, void (^onChanged)(void)) {
     if (!vc) return;
     NSString *cur = FRReadLangPref();
-    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:FRLoc(@"语言", @"Language")
+    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:FRLoc(@"语言", @"Language", @"Язык")
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     NSArray<NSArray<NSString *> *> *items = @[
-        @[@"system", FRLoc(@"跟随系统", @"Follow System")],
+        @[@"system", FRLoc(@"跟随系统", @"Follow System", @"Как в системе")],
         @[@"zh",     @"简体中文"],
         @[@"en",     @"English"],
+        @[@"ru",     @"Русский"],
     ];
 
     for (NSArray<NSString *> *it in items) {
@@ -89,7 +102,7 @@ static inline void FRPresentLanguagePicker(UIViewController *vc, UIView *sourceV
         }]];
     }
 
-    [sheet addAction:[UIAlertAction actionWithTitle:FRLoc(@"取消", @"Cancel")
+    [sheet addAction:[UIAlertAction actionWithTitle:FRLoc(@"取消", @"Cancel", @"Отмена")
                                               style:UIAlertActionStyleCancel
                                             handler:nil]];
 
